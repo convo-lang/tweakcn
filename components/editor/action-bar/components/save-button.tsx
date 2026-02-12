@@ -1,7 +1,7 @@
 import { TooltipWrapper } from "@/components/tooltip-wrapper";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Heart, Loader2 } from "lucide-react";
+import { Loader2, SaveIcon } from "lucide-react";
 
 interface SaveButtonProps extends React.ComponentProps<typeof Button> {
   isSaving: boolean;
@@ -17,7 +17,7 @@ export function SaveButton({ isSaving, disabled, className, ...props }: SaveButt
         disabled={isSaving || disabled}
         {...props}
       >
-        {isSaving ? <Loader2 className="size-3.5 animate-spin" /> : <Heart className="size-3.5" />}
+        {isSaving ? <Loader2 className="size-3.5 animate-spin" /> : <SaveIcon className="size-3.5" />}
         <span className="hidden text-sm md:block">Save</span>
       </Button>
     </TooltipWrapper>

@@ -1,18 +1,16 @@
 import { Separator } from "@/components/ui/separator";
+import { useThemesData } from "@/hooks/themes";
 import { useAIThemeGenerationCore } from "@/hooks/use-ai-theme-generation-core";
 import { useEditorStore } from "@/store/editor-store";
 import { useThemePresetStore } from "@/store/theme-preset-store";
-import { useThemesData } from "@/hooks/themes";
+import { useMemo } from "react";
 import { CodeButton } from "./code-button";
 import { ImportButton } from "./import-button";
 import { MoreOptions } from "./more-options";
-import { PublishButton } from "./publish-button";
 import { ResetButton } from "./reset-button";
 import { SaveButton } from "./save-button";
-import { ShareButton } from "./share-button";
 import { ThemeToggle } from "./theme-toggle";
 import { UndoRedoButtons } from "./undo-redo-buttons";
-import { useMemo } from "react";
 
 interface ActionBarButtonsProps {
   onImportClick: () => void;
@@ -59,16 +57,7 @@ export function ActionBarButtons({
         <ImportButton onClick={onImportClick} disabled={isGeneratingTheme} />
       </div>
       <Separator orientation="vertical" className="mx-1 h-8" />
-      <ShareButton onClick={() => onShareClick(themeState.preset)} disabled={isGeneratingTheme} />
-      {isSavedPreset && !hasUnsavedChanges() ? (
-        <PublishButton
-          themeId={themeState.preset as string}
-          isPublished={isPublished}
-          disabled={isGeneratingTheme}
-        />
-      ) : (
-        <SaveButton onClick={onSaveClick} isSaving={isSaving} disabled={isGeneratingTheme} />
-      )}
+      <SaveButton onClick={onSaveClick} isSaving={isSaving} disabled={isGeneratingTheme} />
       <CodeButton onClick={onCodeClick} disabled={isGeneratingTheme} />
     </div>
   );

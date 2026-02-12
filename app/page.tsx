@@ -1,52 +1,16 @@
-"use client";
+import { getTheme } from "@/actions/themes";
+import Editor from "@/components/editor/editor";
+import { Metadata } from "next";
 
-import { Footer } from "@/components/footer";
-import { AIGenerationCTA } from "@/components/home/ai-generation-cta";
-import { CTA } from "@/components/home/cta";
-import { FAQ } from "@/components/home/faq";
-import { Features } from "@/components/home/features";
-import { Header } from "@/components/home/header";
-import { Hero } from "@/components/home/hero";
-import { HowItWorks } from "@/components/home/how-it-works";
-import { Testimonials } from "@/components/home/testimonials";
-// import { ThemePresetSelector } from "@/components/home/theme-preset-selector";
-import { useEffect, useState } from "react";
+export const metadata: Metadata = {
+  title: "tweakcn — Theme Generator for shadcn/ui",
+  description:
+    "Easily customize and preview your shadcn/ui theme with tweakcn. Modify colors, fonts, and styles in real-time.",
+};
 
-export default function Home() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default async function EditorPage({ params }: { params: Promise<{ themeId: string[] }> }) {
+  const { themeId } = await params;
+  const themePromise = themeId?.length > 0 ? getTheme(themeId?.[0]) : Promise.resolve(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <div className="bg-background text-foreground flex min-h-[100dvh] flex-col items-center justify-items-center">
-      <Header
-        isScrolled={isScrolled}
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-      />
-      <main className="w-full flex-1">
-        <Hero />
-        {/* <ThemePresetSelector /> */}
-        <Testimonials />
-        <Features />
-        <AIGenerationCTA />
-        <HowItWorks />
-        <FAQ />
-        <CTA />
-      </main>
-      <Footer />
-    </div>
-  );
+  return <Editor themePromise={themePromise} />;
 }

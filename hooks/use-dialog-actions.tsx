@@ -1,3 +1,4 @@
+import { saveLocalTheme } from "@/actions/local-theme";
 import { CodePanelDialog } from "@/components/editor/code-panel-dialog";
 import CssImportDialog from "@/components/editor/css-import-dialog";
 import { ShareDialog } from "@/components/editor/share-dialog";
@@ -11,6 +12,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { useEditorStore } from "@/store/editor-store";
 import { useThemePresetStore } from "@/store/theme-preset-store";
 import { parseCssInput } from "@/utils/parse-css-input";
+import { generateThemeCode } from "@/utils/theme-style-generator";
 import { usePostHog } from "posthog-js/react";
 import { createContext, ReactNode, useContext, useState } from "react";
 
@@ -122,21 +124,12 @@ function useDialogActionsStore(): DialogActionsContextType {
   };
 
   const handleSaveClick = (options?: { shareAfterSave?: boolean; openInV0AfterSave?: boolean }) => {
-    if (!session) {
-      let action: "SAVE_THEME" | "SAVE_THEME_FOR_SHARE" | "SAVE_THEME_FOR_V0" = "SAVE_THEME";
-      if (options?.shareAfterSave) action = "SAVE_THEME_FOR_SHARE";
-      if (options?.openInV0AfterSave) action = "SAVE_THEME_FOR_V0";
-      openAuthDialog("signin", action);
-      return;
-    }
 
-    setSaveDialogOpen(true);
-    if (options?.shareAfterSave) {
-      setPendingAction("share");
-    }
-    if (options?.openInV0AfterSave) {
-      setPendingAction("v0");
-    }
+    const code = generateThemeCode(themeState, 'oklch', '4');
+    console.log('hio 👋 👋 👋 SAVE',themeState,{code});
+    saveLocalTheme(code).then(()=>{
+        
+    });
   };
 
   const saveTheme = async (themeName: string) => {
